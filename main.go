@@ -14,7 +14,6 @@ func main() {
 	log.Println("In Main App")
 
 	dbconn := utils.GetConnection()
-	// services.SetDB(dbconn)
 
 	athleteRepo := repositories.NewAthleteRepository(dbconn)
 	feedRepo := repositories.NewFeedRepository(dbconn)
@@ -23,13 +22,6 @@ func main() {
 	outcomeRepo := repositories.NewOutcomeRepository(dbconn)
 	athleteScoreRepo := repositories.NewAthleteScoreRepository(dbconn)
 	gymRepo := repositories.NewGymRepository(dbconn)
-
-	// services.SetAthleteRepo(athleteRepo)
-	// services.SetFeedRepo(feedRepo)
-	// services.SetStyleRepo(styleRepo)
-	// services.SetBoutRepo(boutRepo)
-	// services.SetOutcomeRepo(outcomeRepo)
-	// services.SetAthleteScoreRepo(athleteScoreRepo)
 
 	//Using Constructor Injection
 
