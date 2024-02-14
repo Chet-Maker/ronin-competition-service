@@ -16,7 +16,8 @@ func CreateRouter(db *sqlx.DB,
 	styleService *services.StyleService,
 	boutService *services.BoutService,
 	outcomeService *services.OutcomeService,
-	athleteScoreService *services.AthleteScoreService) *mux.Router {
+	athleteScoreService *services.AthleteScoreService,
+	gymService *services.GymService) *mux.Router {
 	router := mux.NewRouter()
 	router.HandleFunc(base_url+"/athletes", athleteService.GetAllAthletes).Methods("GET")
 	router.HandleFunc(base_url+"/athlete/{athlete_id}", athleteService.GetAthlete).Methods("GET")
@@ -42,9 +43,9 @@ func CreateRouter(db *sqlx.DB,
 	router.HandleFunc(base_url+"/bouts/incomplete/{athlete_id}", boutService.GetIncompleteBouts).Methods("GET")
 	router.HandleFunc(base_url+"/bout/cancel/{bout_id}/{challenger_id}", boutService.CancelBout).Methods("PUT")
 
-	router.HandleFunc(base_url+"/gyms", services.GetAllGyms).Methods("GET")
-	router.HandleFunc(base_url+"/gym", services.CreateGym).Methods("POST")
-	router.HandleFunc(base_url+"/gym/{gym_id}", services.GetGym).Methods("GET")
+	router.HandleFunc(base_url+"/gyms", gymService.GetAllGyms).Methods("GET")
+	router.HandleFunc(base_url+"/gym", gymService.CreateGym).Methods("POST")
+	router.HandleFunc(base_url+"/gym/{gym_id}", gymService.GetGym).Methods("GET")
 
 	router.HandleFunc(base_url+"/outcome", outcomeService.CreateOutcome).Methods("POST")
 	router.HandleFunc(base_url+"/outcome/{outcome_id}", outcomeService.GetOutcome).Methods("GET")
@@ -61,7 +62,7 @@ func CreateRouter(db *sqlx.DB,
 	router.HandleFunc(base_url+"/score/{athlete_id}/all", athleteScoreService.GetAllAthleteScoresByAthleteId).Methods("GET")
 	router.HandleFunc(base_url+"/score/{athlete_id}/style/{style_id}", athleteScoreService.GetAthleteScoreByStyle).Methods("GET")
 
-	router.HandleFunc(base_url+"/feed/{athlete_id}", services.GetFeedByAthleteId).Methods("GET")
+	router.HandleFunc(base_url+"/feed/{athlete_id}", feedService.GetFeedByAthleteId).Methods("GET")
 
 	return router
 }

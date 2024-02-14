@@ -21,10 +21,8 @@ func main() {
 	styleRepo := repositories.NewStyleRepository(dbconn)
 	boutRepo := repositories.NewBoutRepository(dbconn)
 	outcomeRepo := repositories.NewOutcomeRepository(dbconn)
-	if outcomeRepo == nil || outcomeRepo.DB == nil {
-		log.Fatal("Failed to initialize outcome repository")
-	}
 	athleteScoreRepo := repositories.NewAthleteScoreRepository(dbconn)
+	gymRepo := repositories.NewGymRepository(dbconn)
 
 	// services.SetAthleteRepo(athleteRepo)
 	// services.SetFeedRepo(feedRepo)
@@ -41,11 +39,9 @@ func main() {
 	styleService := services.NewStyleService(athleteScoreService, styleRepo)
 	boutService := services.NewBoutService(boutRepo)
 	outcomeService := services.NewOutcomeService(athleteScoreService, outcomeRepo, boutRepo)
-	if outcomeService == nil {
-		log.Fatal("Failed to initialize outcome service")
-	}
+	gymService := services.NewGymService(gymRepo)
 
-	var appRouter = router.CreateRouter(dbconn, athleteService, feedService, styleService, boutService, outcomeService, athleteScoreService)
+	var appRouter = router.CreateRouter(dbconn, athleteService, feedService, styleService, boutService, outcomeService, athleteScoreService, gymService)
 
 	log.Println("listening on Port 8000")
 	log.Fatal(http.ListenAndServe(":8000", appRouter))

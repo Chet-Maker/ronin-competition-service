@@ -13,14 +13,20 @@ import (
 
 var gymRepo *repositories.GymRepository
 
-func SetGymRepo(r *repositories.GymRepository) {
-	gymRepo = r
+type GymService struct {
+	gymRepo *repositories.GymRepository
 }
 
-func GetAllGyms(w http.ResponseWriter, r *http.Request) {
+func NewGymService(gymRepo *repositories.GymRepository) *GymService {
+	return &GymService{
+		gymRepo: gymRepo,
+	}
+}
+
+func (g *GymService) GetAllGyms(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var gyms = models.GetGyms()
-	gyms, err := gymRepo.GetAllGyms()
+	gyms, err := g.gymRepo.GetAllGyms()
 	if err == nil {
 		json.NewEncoder(w).Encode(&gyms)
 	} else {
@@ -31,11 +37,11 @@ func GetAllGyms(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func CreateGym(w http.ResponseWriter, r *http.Request) {
+func (g *GymService) CreateGym(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var gym = models.GetGym()
 	_ = json.NewDecoder(r.Body).Decode(&gym)
-	gym, err := gymRepo.CreateGym(gym)
+	gym, err := g.gymRepo.CreateGym(gym)
 	if err == nil {
 		json.NewEncoder(w).Encode(&gym)
 	} else {
@@ -44,12 +50,12 @@ func CreateGym(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetGym(w http.ResponseWriter, r *http.Request) {
+func (g *GymService) GetGym(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var gyms = models.GetGym()
 	vars := mux.Vars(r)
 	id := vars["gym_id"]
-	gyms, err := gymRepo.GetGymById(id)
+	gyms, err := g.gymRepo.GetGymById(id)
 	if err == nil {
 		json.NewEncoder(w).Encode(&gyms)
 	} else {
